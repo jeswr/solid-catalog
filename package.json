@@ -9,7 +9,7 @@
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
 		"shape:ldo": "ldo build --input ./shex/ --output ./ldo/",
 		"shape:shex": "ts-node scripts/shape.js",
-		"shape": "npm run shape:ldo",
+		"shape": "npm run shape:shex && npm run shape:ldo",
 		"dev:shape": "watch 'npm run shape' ./shapes/",
 		"dev:next": "next dev --turbopack"
 	},
