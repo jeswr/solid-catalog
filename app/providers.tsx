@@ -28,20 +28,20 @@ declare module "@react-types/shared" {
 
 export const CatalogData = React.createContext(createLdoDataset());
 export const Categories = React.createContext<ReturnType<typeof useGetCategories>>({ categories: [], instanceLookup: {} });
-export const CurrentCategory = React.createContext<ReturnType<typeof React.useState<string>>>([undefined, () => {}]);
+// export const CurrentCategory = React.createContext<ReturnType<typeof React.useState<string>>>([undefined, () => {}]);
 
-export function CurrentCategoryProvider({ children }: ProvidersProps) {
-  const { categories } = React.useContext(Categories);
-  const state = React.useState<string>();
+// export function CurrentCategoryProvider({ children }: ProvidersProps) {
+//   const { categories } = React.useContext(Categories);
+//   const state = React.useState<string>();
 
-  React.useEffect(() => {
-    if (typeof state[0] !== 'string' && categories.length > 0) {
-      state[1](categories[0]['@id']!);
-    }
-  }, [categories]);
+//   React.useEffect(() => {
+//     if (typeof state[0] !== 'string' && categories.length > 0) {
+//       state[1](categories[0]['@id']!);
+//     }
+//   }, [categories]);
 
-  return <CurrentCategory.Provider value={state}>{children}</CurrentCategory.Provider>;
-}
+//   return <CurrentCategory.Provider value={state}>{children}</CurrentCategory.Provider>;
+// }
 
 export function CategoriesDataProvider({ children, themeProps }: ProvidersProps) {
   const value = useGetCategories();
@@ -53,29 +53,28 @@ export function CategoriesDataProvider({ children, themeProps }: ProvidersProps)
   );
 }
 
+async function deref(url: string) {
+  const res = await fetch(url);
+  return (await parse(await res.text(), { contentType: "text/turtle", baseIRI: res.url })).store;
+}
+
+async function derefAll(urls: string[]) {
+  const stores = await Promise.all(urls.map(deref));
+  return stores.reduce((acc, store) => acc.union(store as any), Store.dataset());
+}
+
 export function CatalogDataProvider({ children, themeProps }: ProvidersProps) {
   const [catalog, setCatalog] = React.useState<LdoDataset>(() => createLdoDataset());
 
   React.useEffect(() => {
-    Promise.all([
+    derefAll([
       "https://raw.githubusercontent.com/solid-contrib/catalog/refs/heads/main/catalog-data.ttl",
       "/catalog.ttl"
-    ].map((url) => fetch(url)))
-    .then(res => res.map((res) => res.text()))
-    .then((texts) => Promise.all(texts))
-    .then((texts) => texts.map((text) => parse(text, { contentType: "text/turtle" })))
-    .then((promises) => Promise.all(promises))
-    .then((stores) => {
-      const store = stores.reduce((acc, store) => {
-        return acc.union(store.store as any);
-      }, Store.dataset());
-      setCatalog(createLdoDataset(store));
-    })
+    ])
+    .then((store) => { setCatalog(createLdoDataset(store)) })
     .catch((error) => { alert("Unable to load catalog data, reload the page or try again later" + error); });
   }, []);
 
-  console.log(catalog.size);
-  
   return <CatalogData.Provider value={catalog}>{children}</CatalogData.Provider>;
 }
 

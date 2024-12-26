@@ -22,6 +22,7 @@ PREFIX cat: <http://example.org/catalog#>
 shape <#SolidProjectResourceShape> -> soar:PodService schema:LearningResource sioc:Forum schema:Event soar:SpecializedPodService soar:PodServer schema:SoftwareApplication soar:SoftwareLibrary doap:Specification owl:Ontology schema:Person schema:Organization schema:Offer {
   schema:name xsd:string [0..1] .
   schema:about xsd:string [0..1] .
+  rdfs:label xsd:string [0..1] .
   schema:alternateName xsd:string [0..1] .
   rdf:type IRI [0..1] .
   schema:description xsd:string [0..1] .
@@ -31,6 +32,7 @@ shape <#SolidProjectResourceShape> -> soar:PodService schema:LearningResource si
   schema:wiki IRI [0..1] .
   schema:webid IRI [0..1] .
   schema:license xsd:string [0..1] .
+  doap:service-endpoint IRI [0..1] .
 }
 
 shape <#CatalogShape> {

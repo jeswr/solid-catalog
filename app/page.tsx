@@ -1,18 +1,9 @@
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
-import { ScrollShadow } from "@nextui-org/scroll-shadow"
+import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+import { Cards } from "@/components/Card";
 import { CateogoryList } from "@/components/ListBox";
-import { useGetCategories } from "@/hooks/useGetShape";
 
 export default function Home() {
-
-
   return (
     <div className="flex flex-row items-start justify-between">
       <section className="flex flex-col items-left justify-left gap-4">
@@ -20,8 +11,8 @@ export default function Home() {
           <CateogoryList />
         </ScrollShadow>
       </section>
-      <section className="flex flex-col items-right justify-right gap-4">
-        Hello World
+      <section className="flex flex-col items-right justify-right gap-4 pl-5">
+        <Cards />
       </section>
     </div>
   );

@@ -42,6 +42,8 @@
 		"@ldo/cli": "^0.0.1-alpha.28",
 		"@ldo/rdf-utils": "^0.0.1-alpha.24",
 		"@next/eslint-plugin-next": "15.1.2",
+		"@nextui-org/card": "^2.2.8",
+		"@nextui-org/image": "^2.2.4",
 		"@nextui-org/scroll-shadow": "^2.3.4",
 		"@react-types/shared": "3.26.0",
 		"@types/n3": "^1.21.1",

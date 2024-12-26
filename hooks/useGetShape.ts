@@ -8,7 +8,7 @@ import { DataFactory as DF } from "n3";
 
 export function useGetShape<T extends LdoBase>(shape: ShapeType<T>, subject: string | SubjectNode): T {
   const CategoryData = useContext(CatalogData);
-  return useMemo(() => CategoryData.usingType(shape).fromSubject(subject), [CategoryData]);
+  return useMemo(() => CategoryData.usingType(shape).fromSubject(subject), [CategoryData, shape, subject]);
 }
 
 export function useGetCategories() {
@@ -20,7 +20,7 @@ export function useGetCategories() {
     for (const cat of categories) {
       lookup[cat['@id']!] = [];
       CategoryData.match(null, DF.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), DF.namedNode(cat['@id']!)).every((match) => {
-        lookup[cat['@id']!].push(match.object.value);
+        lookup[cat['@id']!].push(match.subject.value);
         return true;
       });
     }

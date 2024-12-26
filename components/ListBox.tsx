@@ -4,7 +4,8 @@ import { CatalogData, CatalogDataProvider, Categories } from "@/app/providers";
 import { useGetCategories } from "@/hooks/useGetShape";
 import {Listbox, ListboxItem} from "@nextui-org/listbox";
 import { cn } from "@nextui-org/theme";
-import { useContext, useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useContext, useEffect, useMemo } from "react";
 
 export const BugIcon = (props: { className?: string }) => {
   return (
@@ -192,8 +193,35 @@ export function DisplayCategory({ category, i }: { category: ReturnType<typeof u
   )
 }
 
+export function useQueryParams<T = {}>() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const queryParams = Object.fromEntries(searchParams.entries()) as Partial<T>;
+  const urlSearchParams = new URLSearchParams(searchParams.toString());
+
+  function setQueryParams(params: Partial<T>) {
+    Object.entries(params).forEach(([key, value]) => {
+      urlSearchParams.set(key, String(value));
+    });
+
+    const search = urlSearchParams.toString();
+    const query = search ? `?${search}` : "";
+
+    router.push(`${pathname}${query}`);
+  }
+
+  return { queryParams, setQueryParams };
+}
+
 export function CateogoryList() {
   const { categories, instanceLookup } = useContext(Categories);
+  const { setQueryParams, queryParams } = useQueryParams<{ category: string }>();
+  useEffect(() => {
+    if (categories.length > 0 && !categories.some((cat) => cat['@id'] === queryParams.category)) {
+      setQueryParams({ category: categories[0]['@id']! });
+    }
+  }, [categories, queryParams.category]);
   return (
     <Listbox
       aria-label="User Menu"
@@ -201,7 +229,7 @@ export function CateogoryList() {
       itemClasses={{
         base: "px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
       }}
-      onAction={(key) => alert(key)}
+      onAction={(key) => setQueryParams({ category: key as string })}
     >
       {...categories.map((category, i) => (
         <ListboxItem
