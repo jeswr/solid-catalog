@@ -67,3 +67,6 @@ export const siteConfig = {
     sponsor: "https://patreon.com/jrgarciadev",
   },
 };
+
+export const baseCatalogIri = "http://example.org/catalog#";
+export const catalogIri = baseCatalogIri + "catalog";

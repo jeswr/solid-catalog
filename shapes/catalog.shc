@@ -1,0 +1,43 @@
+BASE <http://example.org/basic-shape-with-targets>
+
+PREFIX dc: <http://purl.org/dc/terms/> 
+PREFIX doap: <http://usefulinc.com/ns/doap#> 
+PREFIX foaf: <http://xmlns.com/foaf/0.1/homepage> 
+PREFIX meet: <https://www.w3.org/ns/pim/meeting#> 
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX roh: <http://w3id.org/roh/0.3/#> 
+PREFIX schema: <http://schema.org/>
+PREFIX sh: <http://www.w3.org/ns/shacl#> 
+PREFIX sioc: <http://rdfs.org/sioc/ns#> 
+PREFIX siocs: <http://rdfs.org/sioc/services#> 
+PREFIX sioct: <http://rdfs.org/sioc/types#> 
+PREFIX soar: <http://example.com/soar#> 
+PREFIX solid: <http://www.w3.org/ns/solid/terms#> 
+PREFIX vann: <http://purl.org/vocab/vann/> 
+PREFIX vcard: <https://www.w3.org/2006/vcard/ns-2006.html#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX cat: <http://example.org/catalog#>
+
+shape <#SolidProjectResourceShape> -> soar:PodService schema:LearningResource sioc:Forum schema:Event soar:SpecializedPodService soar:PodServer schema:SoftwareApplication soar:SoftwareLibrary doap:Specification owl:Ontology schema:Person schema:Organization schema:Offer {
+  schema:name xsd:string [0..1] .
+  schema:about xsd:string [0..1] .
+  schema:alternateName xsd:string [0..1] .
+  rdf:type IRI [0..1] .
+  schema:description xsd:string [0..1] .
+  schema:keywords xsd:string .
+  schema:homepage IRI [0..1] .
+  schema:repository IRI [0..1] .
+  schema:wiki IRI [0..1] .
+  schema:webid IRI [0..1] .
+  schema:license xsd:string [0..1] .
+}
+
+shape <#CatalogShape> {
+  cat:category IRI [0..*] @<#CategoryShape> .
+}
+
+shape <#CategoryShape> {
+  rdfs:label xsd:string [1..1] .
+  ^rdf:type IRI [1..*] .
+}
