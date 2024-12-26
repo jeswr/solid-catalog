@@ -178,7 +178,7 @@ function IconPicker({ i }: { i: number }) {
   }
 }
 
-export function DisplayCategory({ category, i }: { category: ReturnType<typeof useGetCategories>[0]; i: number }) {
+export function DisplayCategory({ category, i }: { category: ReturnType<typeof useGetCategories>['categories'][0]; i: number }) {
   return (
     <ListboxItem
         key={category["@id"]}
