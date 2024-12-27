@@ -1,10 +1,16 @@
-# Next.js & NextUI Template
+# Solid Catalog Viewer
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+I wanted to spend a day playing around with new frontend frameworks since I haven't been hands on with front end for quite a while.
 
-[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
+The result is https://solid-catalog.jeswr.org, which is another interface for viewing the [Solid Catalog that Jeff Zucker is creating](https://github.com/solid-contrib/catalog?tab=readme-ov-file).
+
+The stack used here was NextUI (UI Components) + Tailwind (Styling) + React + Typescript + Vercel (deployment) + LDO (by Jackson Morgan).
 
 ## Technologies Used
+
+- [Linked Data Objects](https://github.com/o-development/ldo)
+- [SHACL](https://www.w3.org/TR/shacl/)
+- [SHEX](https://shex.io)
 
 - [Next.js 14](https://nextjs.org/docs/getting-started)
 - [NextUI v2](https://nextui.org/)
@@ -14,40 +20,4 @@ This is a template for creating applications using Next.js 14 (app directory) an
 - [Framer Motion](https://www.framer.com/motion/)
 - [next-themes](https://github.com/pacocoursey/next-themes)
 
-## How to Use
-
-### Use the template with create-next-app
-
-To create a new project based on this template using `create-next-app`, run the following command:
-
-```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
-```
-
-### Install dependencies
-
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
-
-```bash
-npm install
-```
-
-### Run the development server
-
-```bash
-npm run dev
-```
-
-### Setup pnpm (optional)
-
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
-
-```bash
-public-hoist-pattern[]=*@nextui-org/*
-```
-
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
-
-## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
+Licensed under the [MIT license](https://github.com/jeswr/solid-catalog/blob/main/LICENSE).

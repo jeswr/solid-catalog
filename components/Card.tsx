@@ -40,32 +40,6 @@ export function ItemCard({ item, i }: { item: string; i: number }) {
     !_href || notUrl.some((url) => _href?.startsWith(url)) || !isUrl(_href)
       ? undefined
       : _href;
-  // console.log(_href, baseCatalogIri, href);
-
-  // const homepage = href ? `https://s2.googleusercontent.com/s2/favicons?domain_url=${href}` : 'https://solidproject.org/image/logo.svg';
-
-  // const [homepage, setHomepage] = React.useState<string>(`https://nextui.org/images/fruit-${(i % 6) + 1}.jpeg`);
-  // const [homepage, setHomepage] = React.useState<string>(
-  //   "https://solidproject.org/image/logo.svg",
-  // );
-
-  // React.useEffect(() => {
-  //   if (href) {
-  //     fetch(href).then(res => {
-  //       console.log(res.headers, res.);
-  //     })
-  //   }
-  //   // setHomepage(`https://nextui.org/images/fruit-${(i % 6) + 1}.jpeg`);
-  //   // if (homepage !== 'https://solidproject.org/image/logo.svg') {
-  //   //   fetch(homepage).then(res => {
-  //   //     if (!res.ok) {
-  //   //       setHomepage('https://solidproject.org/image/logo.svg');
-  //   //     }
-  //   //   }).catch(() => {
-  //   //     setHomepage('https://solidproject.org/image/logo.svg');
-  //   //   });
-  //   // }
-  // }, [href]);
 
   const filter = params.get("filter");
 

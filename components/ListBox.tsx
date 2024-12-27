@@ -4,8 +4,6 @@ import { Listbox, ListboxItem } from "@nextui-org/listbox";
 import { cn } from "@nextui-org/theme";
 import { Suspense, useContext } from "react";
 
-import { useQueryParams } from "../hooks/useQueryParams";
-
 import { useGetCategories } from "@/hooks/useGetShape";
 import { Categories } from "@/app/providers";
 
@@ -281,18 +279,6 @@ export function CateogoryList() {
 
 export function CateogoryListRaw() {
   const { categories, instanceLookup } = useContext(Categories);
-  const { setQueryParams, queryParams } = useQueryParams<{
-    category: string;
-  }>();
-
-  // useEffect(() => {
-  //   if (
-  //     categories.length > 0 &&
-  //     !categories.some((cat) => cat["@id"] === queryParams.category)
-  //   ) {
-  //     setQueryParams({ category: categories[0]["@id"]! });
-  //   }
-  // }, [categories, queryParams.category]);
 
   return (
     <Listbox

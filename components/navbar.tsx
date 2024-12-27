@@ -58,7 +58,6 @@ export const Navbar = () => {
       }
       type="search"
       onChange={(input) => {
-        console.log(input.target.value);
         if (typeof input.target.value === "string") {
           if (input.target.value === "") {
             router.push(pathname);
@@ -111,7 +110,7 @@ export const Navbar = () => {
       </NavbarContent>
 
       <Suspense fallback={<b>Loading ...</b>}>
-      <NavbarMenu>{searchInput}</NavbarMenu>
+        <NavbarMenu>{searchInput}</NavbarMenu>
       </Suspense>
     </NextUINavbar>
   );
