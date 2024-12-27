@@ -11,42 +11,60 @@ import { useGetShape } from "@/hooks/useGetShape";
 import { SolidProjectResourceShapeShapeType } from "@/ldo/catalog.shapeTypes";
 import { Categories } from "@/app/providers";
 
-function toUrl(str: string | undefined): string {
-  if (!str) return "https://solidproject.org/image/logo.svg";
+function isUrl(str: string): boolean {
   try {
-    const res = new URL("favicon.ico", str);
+    new URL(str);
 
-    return res.toString();
+    return true;
   } catch {
-    return "https://solidproject.org/image/logo.svg";
+    return false;
   }
 }
 
-export function ItemCard({ item }: { item: string }) {
+const notUrl = [
+  "https://raw.githubusercontent.com/solid-contrib/catalog/refs/heads/main/catalog-data.ttl",
+  "http://example.org/catalog#",
+];
+
+export function ItemCard({ item, i }: { item: string; i: number }) {
   const params = useSearchParams();
   const info = useGetShape(SolidProjectResourceShapeShapeType, item);
-  const href =
+  const _href =
     info.homepage?.["@id"] ||
     info.repository?.["@id"] ||
     info.serviceEndpoint?.["@id"] ||
     info.webid?.["@id"] ||
     info["@id"];
 
-  // const [homepage, setHomepage] = React.useState<string>(toUrl(href));
-  const [homepage, setHomepage] = React.useState<string>(
-    "https://solidproject.org/image/logo.svg",
-  );
+  const href =
+    !_href || notUrl.some((url) => _href?.startsWith(url)) || !isUrl(_href)
+      ? undefined
+      : _href;
+  // console.log(_href, baseCatalogIri, href);
+
+  // const homepage = href ? `https://s2.googleusercontent.com/s2/favicons?domain_url=${href}` : 'https://solidproject.org/image/logo.svg';
+
+  // const [homepage, setHomepage] = React.useState<string>(`https://nextui.org/images/fruit-${(i % 6) + 1}.jpeg`);
+  // const [homepage, setHomepage] = React.useState<string>(
+  //   "https://solidproject.org/image/logo.svg",
+  // );
 
   // React.useEffect(() => {
-  //   if (homepage !== 'https://solidproject.org/image/logo.svg') {
-  //     fetch(homepage).then(res => {
-  //       if (!res.ok) {
-  //         setHomepage('https://solidproject.org/image/logo.svg');
-  //       }
-  //     }).catch(() => {
-  //       setHomepage('https://solidproject.org/image/logo.svg');
-  //     });
+  //   if (href) {
+  //     fetch(href).then(res => {
+  //       console.log(res.headers, res.);
+  //     })
   //   }
+  //   // setHomepage(`https://nextui.org/images/fruit-${(i % 6) + 1}.jpeg`);
+  //   // if (homepage !== 'https://solidproject.org/image/logo.svg') {
+  //   //   fetch(homepage).then(res => {
+  //   //     if (!res.ok) {
+  //   //       setHomepage('https://solidproject.org/image/logo.svg');
+  //   //     }
+  //   //   }).catch(() => {
+  //   //     setHomepage('https://solidproject.org/image/logo.svg');
+  //   //   });
+  //   // }
   // }, [href]);
 
   const filter = params.get("filter");
@@ -85,16 +103,23 @@ export function ItemCard({ item }: { item: string }) {
 
   return hide ? undefined : (
     <Link href={href} isDisabled={!href} target="_blank">
-      <Card key={item} isPressable shadow="sm">
+      <Card key={item} isPressable className="w-64 align-top" shadow="sm">
         <CardBody className="overflow-visible p-0">
           <Image
             alt={info.name || info.alternateName}
             className="w-full object-cover h-[140px]"
-            radius="lg"
+            fallbackSrc={`https://nextui.org/images/fruit-${(i % 6) + 1}.jpeg`}
             shadow="sm"
             // src={item.img}
-            src={homepage}
-            width="100%"
+            // src={homepage}
+            // TODO: Make this fit content
+            radius="lg"
+            src={
+              href ? `https://t1.gstatic.com/faviconV2?client=SOCIAL&fallback_opts=TYPE,SIZE,URL&url=${href}&size=256` : `https://nextui.org/images/fruit-${(i % 6) + 1}.jpeg`
+            }
+            width="fit"
+            
+            
           />
         </CardBody>
         <CardFooter className="text-small justify-between">
@@ -156,7 +181,7 @@ export function CardTable({
   return (
     <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
       {list.map((item, index) => (
-        <ItemCard key={`${category}${index}`} item={item} />
+        <ItemCard key={`${category}${index}`} i={index} item={item} />
       ))}
     </div>
   );
