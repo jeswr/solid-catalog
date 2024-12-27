@@ -12,13 +12,13 @@ import { CatalogShapeShapeType, CategoryShapeShapeType, SolidProjectResourceShap
 import { Link } from "@nextui-org/link";
 import { useSearchParams, usePathname } from "next/navigation";
 
-function isUrl(str: string | undefined): boolean {
-  if (!str) return false;
+function toUrl(str: string | undefined): string {
+  if (!str) return 'https://solidproject.org/image/logo.svg';
   try {
-    new URL(str);
-    return true;
+    const res = new URL('favicon.ico', str);
+    return res.toString();
   } catch {
-    return false;
+    return 'https://solidproject.org/image/logo.svg';
   }
 }
 
@@ -26,21 +26,21 @@ export function ItemCard({ item }: { item: string }) {
   const info = useGetShape(SolidProjectResourceShapeShapeType, item);
   const href = info.homepage?.['@id'] || info.repository?.["@id"] || info.serviceEndpoint?.["@id"] || info.webid?.["@id"] || info["@id"];
   
-  const [homepage, setHomepage] = React.useState<string>(
-    // isUrl(href) ? new URL('favicon.ico', href).toString() : 
-    'https://solidproject.org/image/logo.svg');
+  // const [homepage, setHomepage] = React.useState<string>(toUrl(href));
+  const [homepage, setHomepage] = React.useState<string>('https://solidproject.org/image/logo.svg');
 
-  React.useEffect(() => {
-    if (homepage !== 'https://solidproject.org/image/logo.svg') {
-      fetch(homepage).then(res => {
-        if (!res.ok) {
-          setHomepage('https://solidproject.org/image/logo.svg');
-        }
-      }).catch(() => {
-        setHomepage('https://solidproject.org/image/logo.svg');
-      });
-    }
-  }, [href]);
+
+  // React.useEffect(() => {
+  //   if (homepage !== 'https://solidproject.org/image/logo.svg') {
+  //     fetch(homepage).then(res => {
+  //       if (!res.ok) {
+  //         setHomepage('https://solidproject.org/image/logo.svg');
+  //       }
+  //     }).catch(() => {
+  //       setHomepage('https://solidproject.org/image/logo.svg');
+  //     });
+  //   }
+  // }, [href]);
 
   console.log(info, href);
   return (
@@ -60,7 +60,21 @@ export function ItemCard({ item }: { item: string }) {
       />
     </CardBody>
     <CardFooter className="text-small justify-between">
+      <div className="w-full">
       <b>{info.name || info.alternateName || info.label}</b>
+      <br/>
+      <i>{info.description}</i>
+      <ul>
+        {(info.keywords && info.keywords?.length > 0) ? <li>Keywords: {info.keywords.join(', ')}</li> : undefined}
+        {info.license && <li>License: {info.license}</li>}
+        {(info.homepage && info.homepage['@id'] !== href) ? <li>Homepage: <Link href={info.homepage['@id']}>{info.homepage['@id']}</Link></li> : undefined}
+        {info.repository && <li>Repository: <Link href={info.repository['@id']}>{info.repository['@id']}</Link></li>}
+        {info.wiki && <li>Wiki: <Link href={info.wiki['@id']}>{info.wiki['@id']}</Link></li>}
+        {info.webid && <li>WebID: <Link href={info.webid['@id']}>{info.webid['@id']}</Link></li>}
+        {/* {info.serviceEndpoint && <li>Service Endpoint: <Link href={info.serviceEndpoint['@id']}>{info.serviceEndpoint['@id']}</Link></li>} */}
+      </ul>
+      </div>
+      
       {/* <p className="text-default-500">{item.price}</p> */}
     </CardFooter>
   </Card>
