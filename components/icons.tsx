@@ -16,8 +16,6 @@ export const Logo: React.FC<IconSvgProps> = ({
     {...props}
   >
     <path
-      fill="currentColor"
-      fillRule="evenodd"
       d="
       M 6.351562 18.800781 
       L 2.457031 12.035156 
@@ -52,6 +50,8 @@ export const Logo: React.FC<IconSvgProps> = ({
       L 15.7 12.867188
       L 11.4026 9.71875
       Z"
+      fill="currentColor"
+      fillRule="evenodd"
     />
   </svg>
 );
