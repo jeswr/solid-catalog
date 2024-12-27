@@ -23,6 +23,7 @@ function toUrl(str: string | undefined): string {
 }
 
 export function ItemCard({ item }: { item: string }) {
+  const params = useSearchParams();
   const info = useGetShape(SolidProjectResourceShapeShapeType, item);
   const href =
     info.homepage?.["@id"] ||
@@ -48,7 +49,41 @@ export function ItemCard({ item }: { item: string }) {
   //   }
   // }, [href]);
 
-  return (
+  const filter = params.get("filter");
+
+  const hide = useMemo(() => {
+    if (typeof filter !== "string" || filter.length === 0) return false;
+
+    const lowerFilter = filter.toLowerCase();
+
+    if (
+      Array.isArray(info.keywords) &&
+      info.keywords.some(
+        (kw) =>
+          typeof kw === "string" && kw.toLowerCase().includes(lowerFilter),
+      )
+    )
+      return false;
+    if (
+      typeof info.name === "string" &&
+      info.name?.toLowerCase().includes(lowerFilter)
+    )
+      return false;
+    if (
+      typeof info.description === "string" &&
+      info.description?.toLowerCase().includes(lowerFilter)
+    )
+      return false;
+    if (
+      typeof info.label === "string" &&
+      info.label?.toLowerCase().includes(lowerFilter)
+    )
+      return false;
+
+    return true;
+  }, [info, filter]);
+
+  return hide ? undefined : (
     <Link href={href} isDisabled={!href} target="_blank">
       <Card key={item} isPressable shadow="sm">
         <CardBody className="overflow-visible p-0">
@@ -68,9 +103,6 @@ export function ItemCard({ item }: { item: string }) {
             <br />
             <i>{info.description}</i>
             <ul>
-              {info.keywords && info.keywords?.length > 0 ? (
-                <li>Keywords: {info.keywords.join(", ")}</li>
-              ) : undefined}
               {info.license && <li>License: {info.license}</li>}
               {info.homepage && info.homepage["@id"] !== href ? (
                 <li>
@@ -99,26 +131,20 @@ export function ItemCard({ item }: { item: string }) {
                   <Link href={info.webid["@id"]}>{info.webid["@id"]}</Link>
                 </li>
               )}
-              {/* {info.serviceEndpoint && <li>Service Endpoint: <Link href={info.serviceEndpoint['@id']}>{info.serviceEndpoint['@id']}</Link></li>} */}
             </ul>
           </div>
-
-          {/* <p className="text-default-500">{item.price}</p> */}
         </CardFooter>
       </Card>
     </Link>
   );
 }
 
-function useCategory() {
-  const params = useSearchParams();
-
-  return params.get("category");
-}
-
-export function CardTable() {
+export function CardTable({
+  category,
+}: {
+  category: string | null | undefined;
+}) {
   const { categories, instanceLookup } = useContext(Categories);
-  const category = useCategory();
   const list = useMemo(
     () =>
       typeof category === "string" && category in instanceLookup
@@ -130,7 +156,7 @@ export function CardTable() {
   return (
     <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
       {list.map((item, index) => (
-        <ItemCard key={index} item={item} />
+        <ItemCard key={`${category}${index}`} item={item} />
       ))}
     </div>
   );
@@ -146,18 +172,13 @@ export function Cards() {
 
 export function CardsRaw() {
   const { categories } = useContext(Categories);
-  const category = useCategory();
-  const name = useMemo(
-    () => categories.find((cat) => cat["@id"] === category)?.label,
-    [category, categories],
-  );
 
-  return (
-    <div>
-      <Button isDisabled className="w-full mb-2">
-        {name}
+  return categories.map((cat) => (
+    <div key={"section_" + cat["@id"]} id={cat["@id"]}>
+      <Button key={"button_" + cat["@id"]} isDisabled className="w-full mb-2">
+        {cat?.label}
       </Button>
-      <CardTable />
+      <CardTable key={"card_" + cat["@id"]} category={cat["@id"]} />
     </div>
-  );
+  ));
 }

@@ -46,17 +46,6 @@ export default function RootLayout({
             <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
               {children}
             </main>
-            <footer className="w-full flex items-center justify-center py-3">
-              {/* <Link
-                isExternal
-                className="flex items-center gap-1 text-current"
-                href="https://solidproject.org/"
-                title="solidproject.org homepage"
-              >
-                <span className="text-default-600">Catalog for</span>
-                <p className="text-primary">Solid</p>
-              </Link> */}
-            </footer>
           </div>
         </Providers>
       </body>

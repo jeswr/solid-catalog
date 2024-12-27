@@ -2,7 +2,7 @@
 
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
 import { cn } from "@nextui-org/theme";
-import { useContext, useEffect } from "react";
+import { Suspense, useContext } from "react";
 
 import { useQueryParams } from "../hooks/useQueryParams";
 
@@ -272,28 +272,36 @@ export function DisplayCategory({
 }
 
 export function CateogoryList() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CateogoryListRaw />
+    </Suspense>
+  );
+}
+
+export function CateogoryListRaw() {
   const { categories, instanceLookup } = useContext(Categories);
   const { setQueryParams, queryParams } = useQueryParams<{
     category: string;
   }>();
 
-  useEffect(() => {
-    if (
-      categories.length > 0 &&
-      !categories.some((cat) => cat["@id"] === queryParams.category)
-    ) {
-      setQueryParams({ category: categories[0]["@id"]! });
-    }
-  }, [categories, queryParams.category]);
+  // useEffect(() => {
+  //   if (
+  //     categories.length > 0 &&
+  //     !categories.some((cat) => cat["@id"] === queryParams.category)
+  //   ) {
+  //     setQueryParams({ category: categories[0]["@id"]! });
+  //   }
+  // }, [categories, queryParams.category]);
 
   return (
     <Listbox
       aria-label="User Menu"
-      className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small rounded-medium"
+      className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small rounded-medium sticky top-0"
       itemClasses={{
         base: "px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
       }}
-      onAction={(key) => setQueryParams({ category: key as string })}
+      // onAction={(key) => setQueryParams({ category: key as string })}
     >
       {...categories.map((category, i) => (
         <ListboxItem
@@ -301,6 +309,7 @@ export function CateogoryList() {
           endContent={
             <ItemCounter number={instanceLookup[category["@id"]!].length} />
           }
+          href={`#${encodeURIComponent(category["@id"]!)}`}
           startContent={
             <IconWrapper
               className={"bg-success/10 text-" + color[i % color.length]}
