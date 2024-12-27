@@ -13,7 +13,7 @@ import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
 import NextLink from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { Suspense, useCallback } from "react";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -110,7 +110,9 @@ export const Navbar = () => {
         <NavbarMenuToggle />
       </NavbarContent>
 
+      <Suspense fallback={<b>Loading ...</b>}>
       <NavbarMenu>{searchInput}</NavbarMenu>
+      </Suspense>
     </NextUINavbar>
   );
 };
