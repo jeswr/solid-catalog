@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useMemo } from "react";
+import React, { Suspense, useContext, useMemo } from "react";
 import { Categories } from "@/app/providers";
 import {Listbox, ListboxItem} from "@nextui-org/listbox";
 import { cn } from "@nextui-org/theme";
@@ -100,6 +100,14 @@ export function CardTable() {
 }
 
 export function Cards() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CardsRaw />
+    </Suspense>
+  )
+}
+
+export function CardsRaw() {
   const { categories } = useContext(Categories);
   const category = useCategory();
   const name = useMemo(() => categories.find((cat) => cat['@id'] === category)?.label, [category, categories]);
