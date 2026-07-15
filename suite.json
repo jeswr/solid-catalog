@@ -1,0 +1,10 @@
+{
+  "$schema": "https://solid.example/suite-tracking/suite.schema.json",
+  "id": "solid-catalog",
+  "kind": "app",
+  "name": "Solid Catalog Viewer",
+  "repo": "https://github.com/jeswr/solid-catalog",
+  "category": "infrastructure",
+  "maturity": "beta",
+  "visibility": "public"
+}
